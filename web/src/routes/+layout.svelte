@@ -7,8 +7,12 @@
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
 
+  import { ModeWatcher } from 'mode-watcher';
+
   let { children } = $props();
 </script>
+
+<ModeWatcher />
 
 <svelte:head>
   <link rel="icon" href={favicon} />

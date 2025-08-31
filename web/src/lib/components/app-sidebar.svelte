@@ -3,6 +3,7 @@
 
   import { House, BookOpen, Film, Gamepad2, Command, Tv } from '@lucide/svelte';
   import type { ComponentProps } from 'svelte';
+  import ModeSwitcher from '$lib/components/mode-switcher.svelte';
   const data = {
     nav_main: [
       {
@@ -103,7 +104,13 @@
         </Sidebar.GroupContent>
       </Sidebar.Group>
     </Sidebar.Content>
-    <Sidebar.Footer></Sidebar.Footer>
+    <Sidebar.Footer>
+      <Sidebar.Menu>
+        <Sidebar.MenuItem>
+          <ModeSwitcher />
+        </Sidebar.MenuItem>
+      </Sidebar.Menu>
+    </Sidebar.Footer>
   </Sidebar.Root>
   <Sidebar.Root collapsible="none" class="hidden flex-1 md:flex">
     <Sidebar.Header></Sidebar.Header>
