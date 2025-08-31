@@ -1,118 +1,172 @@
-<script lang="ts">
-  import * as Sidebar from '$lib/components/ui/sidebar';
+<script lang="ts" module>
+  import BotIcon from '@lucide/svelte/icons/bot';
+  import ChartPieIcon from '@lucide/svelte/icons/chart-pie';
+  import FrameIcon from '@lucide/svelte/icons/frame';
+  import MapIcon from '@lucide/svelte/icons/map';
+  import Settings2Icon from '@lucide/svelte/icons/settings-2';
+  import SquareTerminalIcon from '@lucide/svelte/icons/square-terminal';
 
-  import { House, BookOpen, Film, Gamepad2, Command, Tv } from '@lucide/svelte';
-  import type { ComponentProps } from 'svelte';
-  import ModeSwitcher from '$lib/components/mode-switcher.svelte';
+  import { BookOpen, Film, Gamepad2, Tv } from '@lucide/svelte';
+
+  // This is sample data.
   const data = {
-    nav_main: [
+    user: {
+      name: 'shadcn',
+      email: 'm@example.com',
+      avatar: '/avatars/shadcn.jpg'
+    },
+    trackers: [
       {
-        title: 'Home',
-        url: '/',
-        icon: House,
-        isActive: true
+        name: 'Books',
+        icon: BookOpen
       },
       {
-        title: 'Books',
-        url: '/books',
+        name: 'Films',
+        icon: Film
+      },
+      {
+        name: 'Shows',
+        icon: Tv
+      },
+      {
+        name: 'Games',
+        icon: Gamepad2
+      }
+    ],
+    navMain: [
+      {
+        title: 'Playground',
+        url: '#',
+        icon: SquareTerminalIcon,
+        isActive: true,
+        items: [
+          {
+            title: 'History',
+            url: '#'
+          },
+          {
+            title: 'Starred',
+            url: '#'
+          },
+          {
+            title: 'Settings',
+            url: '#'
+          }
+        ]
+      },
+      {
+        title: 'Models',
+        url: '#',
+        icon: BotIcon,
+        items: [
+          {
+            title: 'Genesis',
+            url: '#'
+          },
+          {
+            title: 'Explorer',
+            url: '#'
+          },
+          {
+            title: 'Quantum',
+            url: '#'
+          }
+        ]
+      },
+      {
+        title: 'Documentation',
+        url: '#',
         icon: BookOpen,
-        isActive: false
+        items: [
+          {
+            title: 'Introduction',
+            url: '#'
+          },
+          {
+            title: 'Get Started',
+            url: '#'
+          },
+          {
+            title: 'Tutorials',
+            url: '#'
+          },
+          {
+            title: 'Changelog',
+            url: '#'
+          }
+        ]
       },
       {
-        title: 'Films',
-        url: '/films',
-        icon: Film,
-        isActive: false
+        title: 'Settings',
+        url: '#',
+        icon: Settings2Icon,
+        items: [
+          {
+            title: 'General',
+            url: '#'
+          },
+          {
+            title: 'Team',
+            url: '#'
+          },
+          {
+            title: 'Billing',
+            url: '#'
+          },
+          {
+            title: 'Limits',
+            url: '#'
+          }
+        ]
+      }
+    ],
+    projects: [
+      {
+        name: 'Design Engineering',
+        url: '#',
+        icon: FrameIcon
       },
       {
-        title: 'Shows',
-        url: '/shows',
-        icon: Tv,
-        isActive: false
+        name: 'Sales & Marketing',
+        url: '#',
+        icon: ChartPieIcon
       },
       {
-        title: 'Games',
-        url: '/games',
-        icon: Gamepad2,
-        isActive: false
+        name: 'Travel',
+        url: '#',
+        icon: MapIcon
       }
     ]
   };
+</script>
+
+<script lang="ts">
+  import NavMain from './nav-main.svelte';
+  import NavProjects from './nav-projects.svelte';
+  import NavUser from './nav-user.svelte';
+  import TrackerSwitcher from './tracker-switcher.svelte';
+  import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+  import type { ComponentProps } from 'svelte';
+  import SearchForm from '$lib/components/search-form.svelte';
 
   let {
     ref = $bindable(null),
+    collapsible = 'icon',
     ...restProps
   }: ComponentProps<typeof Sidebar.Root> = $props();
-
-  let activeItem = $state(data.nav_main[0]);
-  const sidebar = Sidebar.useSidebar();
 </script>
 
-<Sidebar.Root
-  bind:ref
-  collapsible="icon"
-  class="overflow-hidden [&>[data-sidebar=sidebar]]:flex-row"
-  {...restProps}
->
-  <Sidebar.Root
-    collapsible="none"
-    class="!w-[calc(var(--sidebar-width-icon)_+_1px)] border-r"
-  >
-    <Sidebar.Header>
-      <Sidebar.Menu
-        ><Sidebar.MenuItem>
-          <Sidebar.MenuButton size="lg" class="md:h-8 md:p-0">
-            {#snippet child({ props })}
-              <a href="##" {...props}>
-                <div
-                  class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
-                >
-                  <Command class="size-4" />
-                </div>
-              </a>
-            {/snippet}
-          </Sidebar.MenuButton>
-        </Sidebar.MenuItem></Sidebar.Menu
-      >
-    </Sidebar.Header>
-    <Sidebar.Content>
-      <Sidebar.Group>
-        <Sidebar.GroupContent class="px-15 md:px-0">
-          <Sidebar.Menu>
-            {#each data.nav_main as item (item.title)}
-              <Sidebar.MenuItem>
-                <Sidebar.MenuButton
-                  tooltipContentProps={{
-                    hidden: false
-                  }}
-                  onclick={() => {
-                    activeItem = item;
-                    sidebar.setOpen(true);
-                  }}
-                  isActive={activeItem.title === item.title}
-                  class="px-2.5 md:px-2"
-                >
-                  {#snippet tooltipContent()}
-                    {item.title}
-                  {/snippet}
-                  <item.icon />
-                  <span>{item.title}</span>
-                </Sidebar.MenuButton>
-              </Sidebar.MenuItem>
-            {/each}
-          </Sidebar.Menu>
-        </Sidebar.GroupContent>
-      </Sidebar.Group>
-    </Sidebar.Content>
-    <Sidebar.Footer>
-      <Sidebar.Menu>
-        <Sidebar.MenuItem>
-          <ModeSwitcher />
-        </Sidebar.MenuItem>
-      </Sidebar.Menu>
-    </Sidebar.Footer>
-  </Sidebar.Root>
-  <Sidebar.Root collapsible="none" class="hidden flex-1 md:flex">
-    <Sidebar.Header></Sidebar.Header>
-  </Sidebar.Root>
+<Sidebar.Root {collapsible} {...restProps}>
+  <Sidebar.Header>
+    <TrackerSwitcher trackers={data.trackers} />
+    <SearchForm />
+  </Sidebar.Header>
+  <Sidebar.Content>
+    <NavMain items={data.navMain} />
+    <NavProjects projects={data.projects} />
+  </Sidebar.Content>
+  <Sidebar.Footer>
+    <NavUser user={data.user} />
+  </Sidebar.Footer>
+  <Sidebar.Rail />
 </Sidebar.Root>
