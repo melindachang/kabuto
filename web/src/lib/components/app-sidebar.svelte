@@ -1,15 +1,25 @@
 <script lang="ts" module>
-  import BotIcon from '@lucide/svelte/icons/bot';
-  import ChartPieIcon from '@lucide/svelte/icons/chart-pie';
-  import FrameIcon from '@lucide/svelte/icons/frame';
-  import MapIcon from '@lucide/svelte/icons/map';
-  import Settings2Icon from '@lucide/svelte/icons/settings-2';
-  import SquareTerminalIcon from '@lucide/svelte/icons/square-terminal';
-
-  import { BookOpen, Film, Gamepad2, Tv } from '@lucide/svelte';
+  import {
+    BookCheck,
+    Bookmark,
+    BookOpen,
+    Film,
+    Gamepad2,
+    Heart,
+    Highlighter,
+    Home,
+    Star,
+    Tv,
+    Zap
+  } from '@lucide/svelte';
 
   // This is sample data.
-  const data = {
+  const data: {
+    user: { name: string; email: string; avatar: string };
+    trackers: { name: string; icon: Component }[];
+    mainMenu: MenuGroup[];
+    collections: MenuItem[];
+  } = {
     user: {
       name: 'shadcn',
       email: 'm@example.com',
@@ -33,121 +43,57 @@
         icon: Gamepad2
       }
     ],
-    navMain: [
+    mainMenu: [
       {
-        title: 'Playground',
-        url: '#',
-        icon: SquareTerminalIcon,
-        isActive: true,
+        // label: 'General',
         items: [
+          { title: 'Home', url: '/books', icon: Home, isActive: true },
           {
-            title: 'History',
-            url: '#'
-          },
-          {
-            title: 'Starred',
-            url: '#'
-          },
-          {
-            title: 'Settings',
-            url: '#'
+            title: 'Activity',
+            url: '/books/activity',
+            isActive: true,
+            icon: Zap,
+            children: [
+              {
+                title: 'Summary',
+                url: '#',
+                isActive: false
+              },
+              {
+                title: 'Diary',
+                url: '#',
+                isActive: false
+              }
+            ]
           }
         ]
       },
       {
-        title: 'Models',
-        url: '#',
-        icon: BotIcon,
+        label: 'Library',
         items: [
-          {
-            title: 'Genesis',
-            url: '#'
-          },
-          {
-            title: 'Explorer',
-            url: '#'
-          },
-          {
-            title: 'Quantum',
-            url: '#'
-          }
-        ]
-      },
-      {
-        title: 'Documentation',
-        url: '#',
-        icon: BookOpen,
-        items: [
-          {
-            title: 'Introduction',
-            url: '#'
-          },
-          {
-            title: 'Get Started',
-            url: '#'
-          },
-          {
-            title: 'Tutorials',
-            url: '#'
-          },
-          {
-            title: 'Changelog',
-            url: '#'
-          }
-        ]
-      },
-      {
-        title: 'Settings',
-        url: '#',
-        icon: Settings2Icon,
-        items: [
-          {
-            title: 'General',
-            url: '#'
-          },
-          {
-            title: 'Team',
-            url: '#'
-          },
-          {
-            title: 'Billing',
-            url: '#'
-          },
-          {
-            title: 'Limits',
-            url: '#'
-          }
+          { title: 'Books', url: '#', icon: BookCheck, isActive: false },
+          { title: 'To Read', url: '#', icon: Bookmark, isActive: false },
+          { title: 'Reviews', url: '#', icon: Star, isActive: false },
+          { title: 'Highlights', url: '#', icon: Highlighter, isActive: false }
         ]
       }
     ],
-    projects: [
-      {
-        name: 'Design Engineering',
-        url: '#',
-        icon: FrameIcon
-      },
-      {
-        name: 'Sales & Marketing',
-        url: '#',
-        icon: ChartPieIcon
-      },
-      {
-        name: 'Travel',
-        url: '#',
-        icon: MapIcon
-      }
+    collections: [
+      { title: 'Likes', url: '#', icon: Heart, isActive: false },
+      { title: 'Favorites', url: '#', isActive: false }
     ]
   };
 </script>
 
 <script lang="ts">
-  import NavMain from './nav-main.svelte';
-  import NavProjects from './nav-projects.svelte';
   import NavUser from './nav-user.svelte';
   import TrackerSwitcher from './tracker-switcher.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-  import type { ComponentProps } from 'svelte';
+  import type { Component, ComponentProps } from 'svelte';
   import SearchForm from '$lib/components/search-form.svelte';
+  import NavMain from './nav-main.svelte';
+  import type { MenuGroup, MenuItem } from '$lib/types/menu';
+  import NavCollections from './nav-collections.svelte';
 
   let {
     ref = $bindable(null),
@@ -162,8 +108,8 @@
     <SearchForm />
   </Sidebar.Header>
   <Sidebar.Content>
-    <NavMain items={data.navMain} />
-    <NavProjects projects={data.projects} />
+    <NavMain mainMenu={data.mainMenu} />
+    <NavCollections collections={data.collections} />
   </Sidebar.Content>
   <Sidebar.Footer>
     <NavUser user={data.user} />
