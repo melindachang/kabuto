@@ -3,7 +3,7 @@
   import { useSidebar } from '$lib/components/ui/sidebar/context.svelte.js';
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import type { MenuItem } from '$lib/types/menu';
-  import { Ellipsis, Folder, Forward, Trash2 } from '@lucide/svelte';
+  import { Ellipsis, Folder, Settings2, Trash2 } from '@lucide/svelte';
 
   let {
     collections
@@ -48,8 +48,8 @@
               <span>View Collection</span>
             </DropdownMenu.Item>
             <DropdownMenu.Item>
-              <Forward class="text-muted-foreground" />
-              <span>Share Collection</span>
+              <Settings2 class="text-muted-foreground" />
+              <span>Edit Collection</span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item>
