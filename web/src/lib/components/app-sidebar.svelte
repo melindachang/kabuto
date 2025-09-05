@@ -19,6 +19,7 @@
   import SearchForm from '$lib/components/search-form.svelte';
   import NavMain from './nav-main.svelte';
   import NavCollections from './nav-collections.svelte';
+  import NavFooter from './nav-footer.svelte';
 
   import { root_to_tracker } from '$lib/menus';
   import { activeTracker } from '$lib/state.svelte';
@@ -41,6 +42,7 @@
     <NavCollections collections={menu!.collections} />
   </Sidebar.Content>
   <Sidebar.Footer>
+    <NavFooter />
     <NavUser user={data.user} />
   </Sidebar.Footer>
   <Sidebar.Rail />
