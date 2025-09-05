@@ -2,15 +2,47 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import { useSidebar } from '$lib/components/ui/sidebar/index.js';
+  import { activeTracker } from '$lib/state.svelte';
 
+  import {
+    BookOpen,
+    ChevronsUpDown,
+    Music,
+    Film,
+    Gamepad2,
+    Plus,
+    Tv
+  } from '@lucide/svelte';
   import type { Component } from 'svelte';
-  import { ChevronsUpDown, Plus } from '@lucide/svelte';
 
-  let { trackers }: { trackers: { name: string; icon: Component }[] } =
-    $props();
+  const trackers: { name: string; icon: Component }[] = [
+    {
+      name: 'Books',
+      icon: BookOpen
+    },
+    {
+      name: 'Films',
+      icon: Film
+    },
+    {
+      name: 'Music',
+      icon: Music
+    },
+    {
+      name: 'Shows',
+      icon: Tv
+    },
+    {
+      name: 'Games',
+      icon: Gamepad2
+    }
+  ];
+
   const sidebar = useSidebar();
 
-  let activeTracker = $state(trackers[0]);
+  let tracker = $derived(
+    trackers.find(el => el.name.toLowerCase() === activeTracker.value)
+  );
 </script>
 
 <Sidebar.Menu>
@@ -26,14 +58,13 @@
             <div
               class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
             >
-              <activeTracker.icon class="size-4" />
+              {#if tracker}
+                <tracker.icon class="size-4" />
+              {/if}
             </div>
             <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-medium">
-                <!-- {activeTracker.name} -->
-                Kabuto
-              </span>
-              <span class="truncate text-xs">{activeTracker.name}</span>
+              <span class="truncate font-medium"> Kabuto </span>
+              <span class="truncate text-xs">{tracker!.name}</span>
             </div>
             <ChevronsUpDown class="ml-auto" />
           </Sidebar.MenuButton>
@@ -50,7 +81,7 @@
         >
         {#each trackers as tracker, index (tracker.name)}
           <DropdownMenu.Item
-            onSelect={() => (activeTracker = tracker)}
+            onSelect={() => (activeTracker.value = tracker.name.toLowerCase())}
             class="gap-2 p-2"
           >
             <div

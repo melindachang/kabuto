@@ -1,6 +1,5 @@
 <script lang="ts">
   import '../app.css';
-  import favicon from '$lib/assets/favicon.svg';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import * as Breadcrumb from '$lib/components/ui/breadcrumb';
   import { Separator } from '$lib/components/ui/separator';
@@ -27,9 +26,7 @@
         <Breadcrumb.Root>
           <Breadcrumb.List>
             <Breadcrumb.Item class="hidden md:block">
-              <Breadcrumb.Link href="#"
-                >Building Your Application</Breadcrumb.Link
-              >
+              <Breadcrumb.Link href="#">Books</Breadcrumb.Link>
             </Breadcrumb.Item>
             <Breadcrumb.Separator class="hidden md:block" />
             <Breadcrumb.Item>
